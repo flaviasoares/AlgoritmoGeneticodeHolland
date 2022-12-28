@@ -39,11 +39,11 @@ def mostra_pop_adapt(adapt, pop):
   for i in range(10):
     print(adapt[i], " = ", pop[i])
 
-# ordena a população com base no valor de adaptação de cada cromossomo, do maior valor ao menor
+# ordena a população com base no valor de adaptação de cada cromossomo
 def ordena_pop(adapt, pop):
   for i in range(len(pop)):
     for j in range(len(pop)):
-      if adapt[i] > adapt[j]:
+      if adapt[i] < adapt[j]:
         aux1 = adapt[i]
         adapt[i] = adapt[j]
         adapt[j] = aux1
@@ -54,31 +54,31 @@ def ordena_pop(adapt, pop):
 
 # cruza cromossomos dado um ponto de corte aleatório
 def cruzamento(pop, des):
-  # pega apenas os 5 primeiros cromossomos da população para usar no cruzamento
-  
+  # pega apenas os 5 ultimos cromossomos da população para usar no cruzamento
   filho1 = []
   filho2 = []
   for i in range(5):
     for j in range(5):
-      pai = pop[i]
-      mae = pop[i + 1]
+      pai = pop[len(pop[i]) - i]
+      mae = pop[len(pop[j]) - j]
       x = rd.randint(1, 100)
       if x > 60 and len(des) <= 28:
         corte = rd.randint(1, 7)
-        # adiciona os primeiro genes aos cromossomos filhos
-        for k in range(corte):
-          filho1.append(pai[k])
-          filho2.append(mae[k])
+        if i != j:
+          # adiciona os primeiro genes aos cromossomos filhos
+          for k in range(corte):
+            filho1.append(pai[k])
+            filho2.append(mae[k])
 
-        # adiciona os últimos genes aos cromossomos filhos
-        for l in range(len(pai) - corte):
-          filho1.append(mae[l + corte])
-          filho2.append(pai[l + corte])
+          # adiciona os últimos genes aos cromossomos filhos
+          for l in range(len(pai) - corte):
+            filho1.append(mae[l + corte])
+            filho2.append(pai[l + corte])
 
-        des.append(filho1)
-        des.append(filho2)
-        filho1 = []
-        filho2 = []
+          des.append(filho1)
+          des.append(filho2)
+      filho1 = []
+      filho2 = []
 
 
 def mostra_des(des):
@@ -96,24 +96,6 @@ def mutacao(pop, des):
             des[i][j] = 1
           else:
             des[i][j] = 0
-
-def inversao(pop, des):
-  for i in range(5):
-    x = rd.randint(1, 100)
-    if x > 90 and len(des) <= 29:
-      p1 = rd.randint(0, 7)
-      p2 = rd.randint(0, 8)			
-      for j in range(8):
-        des.append(pop[i])	
-      while p2 < p1:
-        p2 = rd.randint(1, 8)					
-      x = int((p2 - p1) / 2)
-      if x == 0:
-        x = 1
-      for k in range(x):
-        y = des[len(des)][p1 + k]
-        des[len(des)][p1 + k] = des[len(des)][p2 - k]
-        des[len(des)][p2 - k] = y
 
 def inversao(pop, des):
   for a in range(5):
@@ -136,7 +118,9 @@ def adaptacaoD(adaptdes, des):
   for i in range(len(des)):
     for j in range(7):
       if des[j] == 0 and des[j + 1] == 1:
-        adaptdes[i] = 1
+        adaptdes.append(1)
+      else:
+        adaptdes.append(0)
 
 def mostra_pop_adaptD(adaptdes, des):
   print(adaptdes)
@@ -194,7 +178,7 @@ def substituicao(pop, des, adapt, adaptdes):
 pop = []
 adapt = []
 des = []
-adaptdes= [0] * 30
+adaptdes= []
 aux = []
 
 print("\n--- População atual gerada ---\n")
@@ -205,11 +189,35 @@ print("\n--- População atual com sua adaptação ---\n")
 adaptacao(adapt, pop)
 mostra_pop_adapt(adapt, pop)
 
-print("\n--- População atual na ordem do mais adaptável ao menos adaptável ---\n")
+print("\n--- População atual na ordem do menos adaptável ao mais adaptável ---\n")
 ordena_pop(adapt, pop)
 mostra_pop_adapt(adapt, pop)
 
-while range(len(adapt)) != 4:
+# print("\n--- Cruzamento ---\n")
+# cruzamento(pop, des)
+# mostra_des(des)
+
+# print("\n--- Mutação ---\n")
+# mutacao(pop, des)
+# mostra_des(des)
+
+# print("\n--- Inversao ---\n")
+# inversao(pop, des)
+# mostra_des(des)
+
+# print("\n--- População descencente com sua adaptação ---\n")
+# adaptacaoD(adaptdes, des)
+# mostra_pop_adaptD(adaptdes, des)
+
+# print("\n--- População descendente na ordem decrescente da adaptação ---\n")
+# ordena_popD(adaptdes, des)
+# mostra_pop_adaptD(adaptdes, des)
+
+# print("\n--- População nova ---\n")
+# substituicao(pop, des, adapt, adaptdes)
+# mostra_pop_adapt(adapt, pop)
+
+while adapt[0] != 4:
   print("\n--- Cruzamento ---\n")
   cruzamento(pop, des)
   mostra_des(des)
@@ -227,7 +235,7 @@ while range(len(adapt)) != 4:
   mostra_pop_adaptD(adaptdes, des)
 
   print("\n--- População descendente na ordem decrescente da adaptação ---\n")
-  ordena_popD(adaptdes, des)
+  ordena_pop(adaptdes, des)
   mostra_pop_adaptD(adaptdes, des)
 
   print("\n--- População nova ---\n")
