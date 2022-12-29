@@ -153,3 +153,6 @@ while adapt[len(adapt) - 1] != 4:
   print("\n--- População descendente na ordem decrescente da adaptação ---\n")
   ordena_pop(adaptDes, des)
   mostra_pop_adapt(adaptDes, des)
+  
+  print("\n--- População nova ---\n")
+  mostra_pop_adapt(adapt, pop)
