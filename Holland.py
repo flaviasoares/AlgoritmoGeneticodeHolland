@@ -114,9 +114,9 @@ def inversao(populacao, descendentes):
 def substituicao(populacao, adaptPop, descendentes, adaptDes):
   novaPopulacao = populacao
   novoAdaptDes = adaptDes
-  b = 0 # índice da população atual
-  c = 0 # índice da população de descendentes
-  for a in range(10): # índice da nova população
+  b = 0
+  c = 0
+  for a in range(10):
     if b <= 10 and c <= len(descendentes):
       if adaptPop[b] > adaptDes[c]:
         for i in range(8):
